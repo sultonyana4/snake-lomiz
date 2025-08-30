@@ -12,6 +12,7 @@ import { GameCanvas } from '../components/GameCanvas.js';
 import { MobileControls } from '../components/MobileControls.js';
 import { UserHeader } from '../components/UserHeader.js';
 import { LoginScreen } from '../components/LoginScreen.js';
+import { GitHubIcon } from '../components/GitHubIcon.js';
 import { GAME_STATES } from '../lib/constants.js';
 
 export default function SnakeLomiz() {
@@ -116,7 +117,18 @@ export default function SnakeLomiz() {
       {/* User Header with Logout */}
       <UserHeader />
 
-      <h1 className="text-4xl font-bold mb-6 text-center">🐍 Snake Lomiz</h1>
+      <div className="flex items-center justify-center gap-4 mb-6">
+        <h1 className="text-4xl font-bold text-center">🐍 Snake Lomiz</h1>
+        <a
+          href="https://github.com/sultonyana4"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-gray-400 hover:text-white transition-colors duration-200 hover:scale-110 transform"
+          title="Visit my GitHub profile"
+        >
+          <GitHubIcon size={32} />
+        </a>
+      </div>
 
       {/* Start Screen */}
       {gameState === GAME_STATES.START_SCREEN && (
@@ -223,6 +235,18 @@ export default function SnakeLomiz() {
         <p>✅ Snake Game with Monad Games ID Integration</p>
         <p>✅ Automatic Blockchain Score Sync</p>
         <p>🎮 Use Arrow Keys or Touch Controls to Play</p>
+        <div className="flex items-center justify-center gap-2 mt-2">
+          <span>Made by</span>
+          <a
+            href="https://github.com/sultonyana4"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-400 hover:text-blue-300 transition-colors duration-200 flex items-center gap-1"
+          >
+            <GitHubIcon size={16} />
+            sultonyana4
+          </a>
+        </div>
       </div>
 
       {/* Mobile Controls */}

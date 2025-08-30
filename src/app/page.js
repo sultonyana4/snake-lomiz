@@ -38,7 +38,7 @@ export default function SnakeLomiz() {
         body: JSON.stringify({
           player: walletAddress,
           scoreAmount: gameData.score,
-          transactionAmount: 0
+          transactionAmount: 1
         }),
       });
 

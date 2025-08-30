@@ -5,8 +5,11 @@ import { useMonadGamesAuth } from '../hooks/useMonadGamesAuth.js';
 import { useGameState } from '../hooks/useGameState.js';
 import { useGameLoop } from '../hooks/useGameLoop.js';
 import { useKeyboardControls } from '../hooks/useKeyboardControls.js';
+import { useMobileControls } from '../hooks/useMobileControls.js';
+import { useSwipeControls } from '../hooks/useSwipeControls.js';
 import { useGameRenderer } from '../hooks/useGameRenderer.js';
 import { GameCanvas } from '../components/GameCanvas.js';
+import { MobileControls } from '../components/MobileControls.js';
 import { UserHeader } from '../components/UserHeader.js';
 import { LoginScreen } from '../components/LoginScreen.js';
 import { GAME_STATES } from '../lib/constants.js';
@@ -72,8 +75,21 @@ export default function SnakeLomiz() {
   // Keyboard controls
   const { processDirectionQueue } = useKeyboardControls(gameState, direction, gameStateActions.setDirection);
 
+  // Mobile controls
+  const { handleMobileDirectionChange, processMobileDirectionQueue } = useMobileControls(gameState, direction, gameStateActions.setDirection);
+
+  // Swipe controls
+  const { processSwipeDirectionQueue } = useSwipeControls(gameState, direction, gameStateActions.setDirection);
+
+  // Combined direction processing for game loop
+  const processAllDirectionQueues = () => {
+    processDirectionQueue();
+    processMobileDirectionQueue();
+    processSwipeDirectionQueue();
+  };
+
   // Game loop
-  useGameLoop(gameState, gameStateActions, processDirectionQueue);
+  useGameLoop(gameState, gameStateActions, processAllDirectionQueues);
 
   // Renderer
   useGameRenderer(canvasRef, snake, direction, food, clock, bomb);
@@ -96,7 +112,7 @@ export default function SnakeLomiz() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center p-4 text-white relative">
+    <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center p-4 pb-32 md:pb-4 text-white relative">
       {/* User Header with Logout */}
       <UserHeader />
 
@@ -117,7 +133,7 @@ export default function SnakeLomiz() {
           </button>
 
           <div className="text-sm text-gray-400">
-            <p>Use arrow keys to control the snake</p>
+            <p>Use arrow keys or touch controls to move</p>
             <p>🟡 Eat food to grow and increase score</p>
             <p>🕐 Collect clocks for extra time (+5s)</p>
             <p>💣 Avoid bombs - they will kill you!</p>
@@ -141,6 +157,9 @@ export default function SnakeLomiz() {
           <div className="mt-4 text-center">
             <div className="text-xs text-gray-400 mb-2">
               🟡 Food (+10 pts) • 🕐 Clock (+5s) • 💣 Bomb (death)
+            </div>
+            <div className="text-xs text-gray-400 mb-2">
+              🎮 Desktop: Arrow keys • Mobile: Touch buttons or swipe
             </div>
             <button
               onClick={handleBackToMenu}
@@ -203,8 +222,14 @@ export default function SnakeLomiz() {
       <div className="text-center text-sm text-gray-400">
         <p>✅ Snake Game with Monad Games ID Integration</p>
         <p>✅ Automatic Blockchain Score Sync</p>
-        <p>🎮 Use Arrow Keys to Play</p>
+        <p>🎮 Use Arrow Keys or Touch Controls to Play</p>
       </div>
+
+      {/* Mobile Controls */}
+      <MobileControls 
+        onDirectionChange={handleMobileDirectionChange}
+        gameState={gameState}
+      />
     </div>
   );
 }
